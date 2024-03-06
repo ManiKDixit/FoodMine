@@ -1,23 +1,29 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute , Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { AppComponent } from '../app.component';
+@Component({
+  selector: 'app-search',
+  standalone: true,
+  imports: [FormsModule,AppComponent],
+  templateUrl: './search.component.html',
+  styleUrl: './search.component.css'
+})
+export class SearchComponent implements OnInit {
+searchTerm:String = "";
 
-import { SearchComponent } from './search.component';
+constructor(private route:ActivatedRoute , private router:Router){}
 
-describe('SearchComponent', () => {
-  let component: SearchComponent;
-  let fixture: ComponentFixture<SearchComponent>;
+ngOnInit(): void {
+  this.route.params.subscribe(params => {
+    this.searchTerm = params['searchTerm'];
+  })
+}
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [SearchComponent]
-    })
-    .compileComponents();
-    
-    fixture = TestBed.createComponent(SearchComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+search():void {
+  if(this.searchTerm){
+    this.router.navigateByUrl('/search/' + this.searchTerm);
+  }
+}
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+}
