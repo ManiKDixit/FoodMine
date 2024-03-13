@@ -13,10 +13,11 @@ import { FoodpageComponent } from './foodpage/foodpage.component';
 import { RouterModule } from '@angular/router';
 import { CartPageComponent } from './cart-page/cart-page.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { HttpClientModule } from '@angular/common/http';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet , HeaderComponent , HomeComponent , StarRatingComponent , FormsModule , SearchComponent , TagsComponent , FoodpageComponent , RouterModule,CartPageComponent,NotFoundComponent],
+  imports: [CommonModule, RouterOutlet , HeaderComponent , HomeComponent , StarRatingComponent , FormsModule , SearchComponent , TagsComponent , FoodpageComponent , RouterModule,CartPageComponent,NotFoundComponent , HttpClientModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

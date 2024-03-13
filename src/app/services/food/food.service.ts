@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { Food } from '../../shared/models/Food';
 import { Tag } from '../../shared/models/Tag';
 import { count } from 'console';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { FOODS_BY_ID_URL, FOODS_BY_SEARCH_URL, FOODS_TAGS_URL, FOODS_URL } from '../../shared/constants/urls';
 
 @Injectable({
   providedIn: 'root'
@@ -11,169 +14,26 @@ import { count } from 'console';
 
 export class FoodService {
 
-  constructor() { }
+  constructor(private http:HttpClient) { }
 
-  getAllTags() : Tag[] {
-    return [
-      {name: 'All' , count:10},
-      {name: 'Fast Food' , count:2},
-      {name: 'Italian' , count:2},
-      {name: 'Dessert' , count:3},
-      {name: 'Asian' , count:2},
-      {name: 'Comfort Food' , count:3},
-      {name: 'Quick Recipe' , count:3},
-      {name: 'Chocolate' , count:2},
-      {name: 'Chinese' , count:2},
-      {name: 'Indian' , count:2},
-    ]
+  getAllTags() : Observable<Tag[]> {
+    return this.http.get<Tag[]>(FOODS_TAGS_URL);
   }
 
-  getFoodById(id: number) {
-    return this.getAll().find(food => food.id == id)!;
+  getFoodById(id: number): Observable<Food> {
+    return this.http.get<Food>(FOODS_BY_ID_URL + id)
   }
 
-  getAllFoodsBySearchTerm(searchTerm:string): Food[] {
+  getAllFoodsBySearchTerm(searchTerm:string) {
 
-   return this.getAll().filter(food => food.name.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()));
+   return this.http.get<Food[]>(FOODS_BY_SEARCH_URL + searchTerm);
   }
 
-  getAllFoodsByTag(tag:string): Food[] {
-    return tag == "All" ? this.getAll() : this.getAll().filter(food => food.tags?.includes(tag));
+  getAllFoodsByTag(tag:string): Observable<Food[]> {
+    return tag == "All" ? this.getAll() : this.http.get<Food[]>(FOODS_TAGS_URL + tag)
   }
 
-  getAll() : Food[]{
-    return [
-      {
-        id : 1,
-        name : " Margharita Pizza",
-        price : 15 ,
-        cookTime : '50 mins',
-        favorite : true,
-        stars : 4,
-        imageUrl: 'assets/images/img_1_pizza.jpg',
-        origins: ['italy',' Europe'],
-        tags : ['Italian' , 'Fast Food' , 'Cheese']
-      } ,
-
-      {
-        id : 2,
-        name : "Chocolate Cake",
-        price : 8 ,
-        cookTime : '40 mins',
-        favorite :false,
-        stars : 3.5,
-        imageUrl: 'assets/images/img_3_cake.jpeg',
-        origins: ['United States',' Europe'],
-        tags : ['Dessert' , 'Chocolate']
-      } ,
-
-      {
-        id : 3,
-        name : "Macroons",
-        price : 14 ,
-        cookTime : '90 mins',
-        favorite :false,
-        stars : 3,
-        imageUrl: 'assets/images/img_4_macroons.jpeg',
-        origins: ['Italy'],
-        tags : ['Dessert' , 'Gourmet']
-      } , 
-
-      {
-        id : 4,
-        name : "Dumplings",
-        price : 12 ,
-        cookTime : '60 mins',
-        favorite :true,
-        stars : 4.6,
-        imageUrl: 'assets/images/img_5_dumplings.jpeg',
-        origins: ['China', ' Cantonese'],
-        tags : ['Asian' , 'Chinese', 'Comfort Food']
-      } , 
-      
-      {
-        id : 5,
-        name : "Ramen",
-        price : 15 ,
-        cookTime : '40 mins',
-        favorite :true,
-        stars : 4.3,
-        imageUrl: 'assets/images/img_6_Ramen.jpeg',
-        origins: ['China', ' Japan'],
-        tags : ['Asian' , 'Chinese', 'Comfort Food' , 'Japanese']
-      } , 
-
-      {
-        id : 6,
-        name : "Spaghetti",
-        price : 11 ,
-        cookTime : '30 mins',
-        favorite :false,
-        stars : 3.7,
-        imageUrl: 'assets/images/img_7_Spaghetti.jpeg',
-        origins: ['Italy'],
-        tags : ['Italian', 'Comfort Food' , 'Quick Recipe']
-      } , 
-  
-      {
-        id : 7,
-        name : "Samosa",
-        price : 8 ,
-        cookTime : '70 mins',
-        favorite :false,
-        stars : 3.5,
-        imageUrl: 'assets/images/img_8_Samosa.jpeg',
-        origins: ['India'],
-        tags : ['Indian', 'Snacks']
-      } , 
-
-      {
-        id : 8,
-        name : "Paneer",
-        price : 14 ,
-        cookTime : '50 mins',
-        favorite :false,
-        stars : 3.4,
-        imageUrl: 'assets/images/img_9_Paneer.jpg',
-        origins: ['India'],
-        tags : ['Indian']
-      } , 
-
-      {
-        id : 9,
-        name : "Pancakes",
-        price : 10 ,
-        cookTime : '30 mins',
-        favorite :true,
-        stars : 4,
-        imageUrl: 'assets/images/img_10_pancakes.jpg',
-        origins: ['Greece'],
-        tags : ['Greek' , 'Dessert' , 'Quick Recipe']
-      } , 
-
-      {
-        id : 10,
-        name : "Hamburger",
-        price : 11 ,
-        cookTime : '30 mins',
-        favorite :true,
-        stars : 3.7,
-        imageUrl: 'assets/images/img_2_burger.jpeg',
-        origins: ['United States', ' Germany'],
-        tags : ['Fast Food' , 'Quick Recipe']
-      } , 
-
-      // 'assets/images/img_1_pizza.jpg',
-      // 'assets/images/img_2_burger.jpeg',
-      // 'assets/images/img_3_cake.jpeg',
-      // 'assets/images/img_4_macroons.jpeg',
-      // 'assets/images/img_5_dumplings.jpeg',
-      // 'assets/images/img_6_Ramen.jpeg',
-      // 'assets/images/img_7_Spaghetti.jpeg',
-      // 'assets/images/img_8_Samosa.jpeg',
-      // 'assets/images/img_9_Paneer.jpg',
-      // 'assets/images/img_10_pancakes.jpg',
-      
-    ]
+  getAll(): Observable<Food[]>{
+    return this.http.get<Food[]>(FOODS_URL);
   }
 }
