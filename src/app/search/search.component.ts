@@ -10,20 +10,36 @@ import { AppComponent } from '../app.component';
   styleUrl: './search.component.css'
 })
 export class SearchComponent implements OnInit {
-searchTerm:String = "";
+searchTerm = "";
 
-constructor(private route:ActivatedRoute , private router:Router){}
+constructor( route:ActivatedRoute , private router:Router){
 
-ngOnInit(): void {
-  this.route.params.subscribe(params => {
-    this.searchTerm = params['searchTerm'];
-  })
+  route.params.subscribe((params) => {
+    if(params['searchTerm'])
+    {
+        this.searchTerm = params['searchTerm']
+    }
+  });
 }
 
-search():void {
-  if(this.searchTerm){
-    this.router.navigateByUrl('/search/' + this.searchTerm);
+
+
+ngOnInit(): void {
+  // this.route.params.subscribe(params => {
+  //   this.searchTerm = params['searchTerm'];
+  //})
+}
+
+search(term:string){
+  if(term)
+  {
+    this.router.navigateByUrl('/search/'+ term);
   }
 }
 
+
 }
+
+
+
+
