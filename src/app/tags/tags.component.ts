@@ -12,45 +12,20 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './tags.component.html',
   styleUrl: './tags.component.css'
 })
-// export class TagsComponent implements OnInit {
-
-//   @Input()
-//   foodPageTags?:string[];
-
-//   tags?: Tag[] ;
-//   constructor(private foodService:FoodService) {
-
-//   }
-
-//   ngOnInit(): void {
-//     if(!this.foodPageTags){
-//       this.tags = this.foodService.getAllTags();
-//     }
-    
-      
-//   }
-// }
 
 
 
 export class TagsComponent implements OnInit {
-
-  @Input()
-  foodPageTags?:string[];
-
-  
   tags?:Tag[];
-
-  @Input()
-  justifyContent:string = 'center';
-
-  
-  constructor(private foodService:FoodService) { }
+  constructor(foodService:FoodService) {
+    console.log("testing tag");
+    foodService.getAllTags().subscribe(serverTags => {
+      this.tags = serverTags;
+      
+    });
+   }
 
   ngOnInit(): void {
-    if(!this.foodPageTags)
-      this.foodService.getAllTags().subscribe(serverTags => {
-    this.tags = serverTags});
   }
 
 }

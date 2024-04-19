@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Food } from '../shared/models/Food';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { ActivatedRoute, Route, Router, RouterModule } from '@angular/router';
 import { FoodService } from '../services/food/food.service';
 import { StarRatingComponent } from '../components/partials/star-rating/star-rating.component';
 import { TagsComponent } from '../tags/tags.component';
@@ -13,41 +13,29 @@ import { NotFoundComponent } from '../not-found/not-found.component';
 @Component({
   selector: 'app-foodpage',
   standalone: true,
-  imports: [StarRatingComponent,TagsComponent,CommonModule,AppComponent,FormsModule,NotFoundComponent],
+  imports: [StarRatingComponent,TagsComponent,CommonModule,AppComponent,FormsModule,NotFoundComponent,RouterModule],
   templateUrl: './foodpage.component.html',
   styleUrl: './foodpage.component.css'
 })
-export class FoodpageComponent implements OnInit {
-food!: Food;
+ 
 
-// constructor(private activatedRoute: ActivatedRoute , private foodService: FoodService){
-//   this.activatedRoute.params.subscribe((params) => {
-//    if(params['id']){
-//     this.food = this.foodService.getFoodById(params['id']);
-//    }
-//   })
-// }
+export class FoodPageComponent implements OnInit {
+  food!: Food;
+  constructor(activatedRoute:ActivatedRoute, foodService:FoodService,
+    private cartService:CartService, private router: Router) {
+    activatedRoute.params.subscribe((params) => {
+      if(params['id'])
+      foodService.getFoodById(params['id']).subscribe(serverFood => {
+        this.food = serverFood;
+      });
+    })
+   }
 
-constructor(private activatedRoute:ActivatedRoute,
-  private foodService: FoodService,
-  private cartService:CartService,
-  private router:Router,
- ) { 
-  this.activatedRoute.params.subscribe((params) => {
-    if(params['id'])
-    this.foodService.getFoodById(params['id']).subscribe(serverFood => {
-  this.food = serverFood});
-  })
+  ngOnInit(): void {
+  }
 
-}
-
-ngOnInit():void {
-
-}
-
-addToCart(){
-  this.cartService.addToCart(this.food);
-  this.router.navigateByUrl('/cart-page');
-}
-
+  addToCart(){
+    this.cartService.addToCart(this.food);
+    this.router.navigateByUrl('/cart-page');
+  }
 }

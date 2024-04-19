@@ -26,23 +26,26 @@ import { Observable } from 'rxjs';
 export class HomeComponent implements OnInit{
 
   foods:Food[] = [];
-  constructor(private foodService:FoodService , private route:ActivatedRoute){
+  constructor( foodService:FoodService , route:ActivatedRoute){
     let foodsObservable : Observable<Food[]>;
-    foodsObservable = this.foodService.getAll();
-    this.route.params.subscribe(params => {
-      if(params['searchTerm']){
-        foodsObservable = this.foodService.getAllFoodsBySearchTerm(params['searchTerm'])
-      }
-      else if(params['tag']){
-        foodsObservable = this.foodService.getAllFoodsByTag(params['tag']);
-      }
-      else {
-        foodsObservable = this.foodService.getAll();
-      }
-      foodsObservable.subscribe((serverFoods) => {
-        this.foods = serverFoods;
-      })
+    //foodsObservable = this.foodService.getAll();
+    route.params.subscribe((params) => {
+        if(params['searchTerm']){
+          foodsObservable = foodService.getAllFoodsBySearchTerm(params['searchTerm'])
+        }
+        else if(params['tag']){
+          foodsObservable = foodService.getAllFoodsByTag(params['tag']);
+          console.log(foodService.getAllFoodsByTag(params['tag']));
+        }
+        else {
+          foodsObservable = foodService.getAll();
+        }
+        foodsObservable.subscribe((serverFoods) => {
+          this.foods = serverFoods;
+        })
+      
     })
+    
   }
 
 
